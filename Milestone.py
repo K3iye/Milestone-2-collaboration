@@ -62,7 +62,7 @@ class Courses:
     number of credits, and a list of enrolled Student objects.
     """
     # students is a list of Student objects. students entrolled in the course
-    def __init__(self, course_code: str, credits: int, students: list):
+    def __init__(self, course_code: str, credits: int, students: list, capacity: int):
         """
         Initializes a Course object with course_code, credit value,
         and list of students enrolled.
@@ -70,6 +70,7 @@ class Courses:
         self.course = course_code
         self.credits = credits
         self.students = students
+        self.capacity = capacity
     
     # Supposed to add a Student object to the course roster    
     def add_student(self, student):
