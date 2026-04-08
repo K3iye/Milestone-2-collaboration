@@ -1,4 +1,6 @@
 import csv
+from Milestone2 import LinkedQueue, EnrollmentRecord, binary_search_helper
+from datetime import date
 
 def course_data_to_dict(filename):
     """
@@ -46,8 +48,8 @@ def university_data_to_dict(filename):
         }
     return university_dict
 
-course_data = course_data_to_dict('course_catalog.csv')
-university_data = university_data_to_dict('university_data.csv')
+# course_data = course_data_to_dict('course_catalog.csv')
+# university_data = university_data_to_dict('university_data.csv')
 #print(university_data["STU00001"]) # -> is formatted like this 
                                     #      'name': Student_1
                                     #      'courses': {
@@ -62,31 +64,57 @@ class Courses:
     number of credits, and a list of enrolled Student objects.
     """
     # students is a list of Student objects. students entrolled in the course
-    def __init__(self, course_code: str, credits: int, students: list, capacity: int):
+    def __init__(self, course_code: str, credits: int, capacity: int):
         """
         Initializes a Course object with course_code, credit value,
         and list of students enrolled.
         """
         self.course = course_code
         self.credits = credits
-        self.students = students
         self.capacity = capacity
+        
+        self.enrolled = [] # list of EnrollmentRecord
+        self.waitlist = LinkedQueue() # queue of student objects
+        self.sorted_by = None
     
     # Supposed to add a Student object to the course roster    
-    def add_student(self, student):
-        if student in self.students:
-            raise ValueError("Student already in the course")
-        """
-        Adds a Student object to the course roster
-        """
-        self.students.append(student)
+    def request_enroll(self, student: "Student", enroll_date: str):
+        for record in self.enrolled:
+            if record.student.student_id == student.student_id:
+                raise ValueError("Student already enrolled")
+        
+        if len(self.enrolled) < self.capacity:
+            record = EnrollmentRecord(student, enroll_date)
+            self.enrolled.append(record)
+        else:
+            self.waitlist.enqueue(student)
+   
+    def drop(self, student_id: str, enroll_date: str = None):
+        if self.sorted_by != "id":
+           raise ValueError("Roster must be sorted by Id first")
+       
+        index = binary_search_helper(self.enrolled, student_id)
+       
+        if index == -1:
+            raise ValueError("Student not found")
+        self.enrolled.pop(index)
+        
+        if not self.waitlist.is_empty():
+            next_student = self.waitlist.dequeue()
+            if enroll_date is not None:
+                new_date = enroll_date
+            else:
+                new_date = date.today().strftime("%Y-%m-%d")
+            new_record = EnrollmentRecord(next_student, new_date)
+            self.enrolled.append(new_record)
+            self.sorted_by = None
    
    # returns the number of students currently enrolled 
     def get_student_count(self) -> int:
         """
         Returns the number of students currently enrolled in the course.
         """
-        return len(self.students)
+        return len(self.enrolled)
     
 class Student:
     """
@@ -229,17 +257,15 @@ class University:
         #Course Object
         self.courses = {}
         
-    def add_course(self, course_code: str, credits: int) -> Courses: # Course object
+    def add_course(self, course_code: str, credits: int, capacity: int) -> Courses: # Course object
         """
         Adds a new course to the university if it does not exist.
         Returns the course object.
         """ 
         if course_code in self.courses:
             raise ValueError("Course already exists")
-        if course_code in self.courses:
-            return self.courses[course_code]
         
-        new_course = Courses(course_code, credits, [])
+        new_course = Courses(course_code, credits, capacity)
         self.courses[course_code] = new_course
         return new_course
 
