@@ -3,7 +3,7 @@
 Enrollment record created by Ryan
 """
 class EnrollmentRecord:
-    def __init__(self,student: "Student", enroll_date):
+    def __init__(self,student , enroll_date):
         self.student = student
         self.enroll_date = enroll_date
         
@@ -76,15 +76,3 @@ class LinkedQueue:
     def __len__(self):
         return self._size
 
-
-
-
-
-
-
-
-# l1 = LinkedQueue()
-# l1.enqueue(3)
-# l1.enqueue(4)
-# print(l1.dequeue())
-# print(l1.tail)

@@ -1,0 +1,26 @@
+Milestone 2 Time Complexity Report
+
+The linkedQueue implements both enqueue and dequeue operations in
+constant time, or O(1). This is because adding or removing only 
+requires updating the head. Since its a queue it involves FIFO or
+first in first out for the waitlist.
+
+For sorting, two algorithms were implemented: insertion sort 
+selection sort. Insertion sort has a worst-case time Complexity
+of O(n^2), which occurs when the list is sorted in reverse order.
+Its best-case time complexity is O(n) when the list is already, sorted
+since it only needs to make one pass. Selection sort, always runs
+O(n^2) time regardless of the list, because it scans elements to find
+the minimum. Both are simple sorting algorithms, but insertion sort 
+is more efficient for small or partially sorted datasets, like the course rosters.
+
+The recursive binary search used for dropping students has time
+complexity of O(logn). This is because it compares the middle index
+value with target and halfs the search space depending on that.
+Binary search has a best case of O(1) if the value is directly in the middle.
+However, binary search only works if the list is already sorted, without
+sorting it wont be able to split the list accurately.
+
+Between the 2 sorting algorithms, insertion sort is preferred when
+the data is mostly sorted or if the dataset is small. Selection sort 
+is also an unstable sorting algorithm which makes it worse to use.
