@@ -1,6 +1,6 @@
 import unittest
-from Milestone import Courses, Student, University
-from Milestone2 import EnrollmentRecord, LinkedQueue, binary_search_helper, recursive_binary_search
+from Milestone import University
+from Milestone2 import LinkedQueue, binary_search_helper
 
 class TestMilestone2(unittest.TestCase):
     # Linked Queue Tests
