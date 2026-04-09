@@ -2,18 +2,17 @@ import csv
 from Milestone2 import LinkedQueue, EnrollmentRecord, binary_search_helper
 from datetime import date
 
-def load_course_catalog(filename):
-    courses = {}
-    with open(filename, "r", newline = '') as csv_file:
-        my_reader = csv.reader(csv_file)
-        next(my_reader)
+def load_courses(filename, university):
+    with open(filename, "r", newline= '') as csv_file:
+        my_reader = csv.DictReader(csv_file)
         for row in my_reader:
-            new_course = Courses(row[0], row[1], row[2], row[3], row[4])
-            courses[row[0]] = new_course
+            course_id = row["course_id"]
+            credits = int(row["credits"])
+            capacity = int(row["capacity"])
+            university.add_course(course_id, credits, capacity)
             
 def university_data_to_dict(filename):
     # This was created by ryan and it reads the csv file, creates, stores, and returns the dict with the information included
-
     """
     Created by Ryan.
 

@@ -1,8 +1,25 @@
 import unittest
-from Milestone import University
+from Milestone import University, load_courses
 from Milestone2 import LinkedQueue, binary_search_helper
 
 class TestMilestone2(unittest.TestCase):
+
+    # CSV testing for reading course catalog with capacity
+    def test_csv(self):
+        uni = University()
+    
+        load_courses("course_catalog_CSE10_with_capacity.csv", uni)
+
+        s1 = uni.add_student("STU00001", "A")
+        s2 = uni.add_student("STU00002", "B")
+
+        course = uni.get_course("CSE1010")
+
+        course.request_enroll(s1, "2026-04-01")
+        course.request_enroll(s2, "2026-04-02")
+
+        self.assertEqual(len(course.enrolled), 2)
+
     # Linked Queue Tests
     def test_FIFO(self):
         new_queue = LinkedQueue()
