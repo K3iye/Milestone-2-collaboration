@@ -2,23 +2,15 @@ import csv
 from Milestone2 import LinkedQueue, EnrollmentRecord, binary_search_helper
 from datetime import date
 
-def course_data_to_dict(filename):
-    """
-    Created by Ryan.
-
-    Reads a CSV file containing course data and returns
-    a dictionary with course_code and credits
-    """
-    course_dict = {}
+def load_course_catalog(filename):
+    courses = {}
     with open(filename, "r", newline = '') as csv_file:
         my_reader = csv.reader(csv_file)
         next(my_reader)
         for row in my_reader:
-            course_code = str(row[0])
-            credits = int(row[1])
-            course_dict[course_code] = credits
-        return course_dict
-    
+            new_course = Courses(row[0], row[1], row[2], row[3], row[4])
+            courses[row[0]] = new_course
+            
 def university_data_to_dict(filename):
     # This was created by ryan and it reads the csv file, creates, stores, and returns the dict with the information included
 
@@ -48,14 +40,6 @@ def university_data_to_dict(filename):
         }
     return university_dict
 
-# course_data = course_data_to_dict('course_catalog.csv')
-# university_data = university_data_to_dict('university_data.csv')
-#print(university_data["STU00001"]) # -> is formatted like this 
-                                    #      'name': Student_1
-                                    #      'courses': {
-                                    #      'Math2010': 'C+ 
-                                    #       }
-
 class Courses: 
     """
     By: Ryan
@@ -63,7 +47,6 @@ class Courses:
     This represents a university course. It stores the course_code,
     number of credits, and a list of enrolled Student objects.
     """
-    # students is a list of Student objects. students entrolled in the course
     def __init__(self, course_code: str, credits: int, capacity: int):
         """
         Initializes a Course object with course_code, credit value,
@@ -115,6 +98,35 @@ class Courses:
         Returns the number of students currently enrolled in the course.
         """
         return len(self.enrolled)
+    
+    def sort_enrolled(self, by, algorithm):
+        """
+        Sorts the roster by name, id, or enroll date using either insertion or selection
+        """
+        def get_val(record):
+            if by == 'id': 
+                return record.student.student_id
+            if by == 'name': 
+                return record.student.name
+            return record.enroll_date
+
+        if algorithm == 'insertion':
+            for i in range(1, len(self.enrolled)):
+                key_item = self.enrolled[i]
+                j = i - 1
+                while j >= 0 and get_val(self.enrolled[j]) > get_val(key_item):
+                    self.enrolled[j + 1] = self.enrolled[j]
+                    j -= 1
+        
+        if algorithm == 'selection':
+            for i in range(len(self.enrolled)):
+                min_idx = i
+                for j in range(i + 1, len(self.enrolled)):
+                    if get_val(self.enrolled[j]) < get_val(self.enrolled[min_idx]):
+                        min_idx = j
+                self.enrolled[i], self.enrolled[min_idx] = self.enrolled[min_idx], self.enrolled[i]
+        
+        self.sorted_by = by
     
 class Student:
     """
