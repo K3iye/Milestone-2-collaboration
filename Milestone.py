@@ -91,13 +91,14 @@ class Courses:
    
     def drop(self, student_id: str, enroll_date: str = None):
         if self.sorted_by != "id":
-           raise ValueError("Roster must be sorted by Id first")
+           raise ValueError("Roster must be sorted by ID first")
        
         index = binary_search_helper(self.enrolled, student_id)
        
         if index == -1:
             raise ValueError("Student not found")
         self.enrolled.pop(index)
+        self.sorted_by = None
         
         if not self.waitlist.is_empty():
             next_student = self.waitlist.dequeue()
@@ -107,7 +108,6 @@ class Courses:
                 new_date = date.today().strftime("%Y-%m-%d")
             new_record = EnrollmentRecord(next_student, new_date)
             self.enrolled.append(new_record)
-            self.sorted_by = None
    
    # returns the number of students currently enrolled 
     def get_student_count(self) -> int:
