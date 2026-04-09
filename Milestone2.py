@@ -34,12 +34,12 @@ def recursive_binary_search(records: list[EnrollmentRecord], target_id: str, low
 """
 
 class Node:
-    def __init__(self, item, next = None):
-        self.item = item
+    def __init__(self, data, next = None):
+        self.data = data
         self.next = next
     
     def __repr__(self):
-        return f"Node({self.item})"
+        return f"Node({self.data})"
     
 class LinkedQueue:
     def __init__(self): 
@@ -59,7 +59,7 @@ class LinkedQueue:
     def dequeue(self):
         if self.head is None:
             raise ValueError("Queue is empty")
-        item = self.head.item
+        item = self.head.data
         
         if self.head.next is None:
             self.head = None
